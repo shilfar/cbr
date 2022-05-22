@@ -5,7 +5,7 @@ import psycopg2
 from datetime import date, timedelta
 
 conn = psycopg2.connect(
-   database="mytestdb", user='postgres', password='ubuntu20', host='fin-db-clouddevops.clhrna5oh7sa.eu-central-1.rds.amazonaws.com', port='5432'
+   database="postgres", user='postgres', password='ubuntu20', host='fin-db-clouddevops.clhrna5oh7sa.eu-central-1.rds.amazonaws.com', port='5432'
 )
 conn.autocommit = True
 cursor = conn.cursor()

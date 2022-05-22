@@ -67,11 +67,11 @@ pipeline {
             stage('Deploy cbr1backend') {
             steps {
                 dir('deploy') {
-
+                    sh 'kubectl delete deployment cbr1app-deploy-back -n back'
                     sh 'kubectl apply -f deploy-back-back.yaml --namespace=back'
                     sh 'kubectl get svc --namespace=back'
                     sh 'kubectl get pods -n back -o wide'
-                    sh 'kubectl rollout restart deployment cbr1app-deploy-back -n back'
+
                     sh 'kubectl get svc --namespace=back'
                     sh 'kubectl get pods -n back -o wide'
                 }
