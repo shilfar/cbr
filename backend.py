@@ -2,7 +2,6 @@
 import urllib.request
 import xml.dom.minidom as minidom
 import psycopg2
-#import sys
 from datetime import date, timedelta
 
 conn = psycopg2.connect(
@@ -75,7 +74,7 @@ while f_day <= today:
             currency_dict["Nominal"] = nominal.firstChild.data
             currency_dict["Name"] = name.firstChild.data
             currency_dict["Value"] = value.firstChild.data
-    #    return currency_dict
+
             val_to_db = [str(v) for k,v in currency_dict.items()]
 
             row_test = (x_date, val_to_db[0], val_to_db[1], val_to_db[2], val_to_db[3], val_to_db[4], val_to_db[5])

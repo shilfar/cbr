@@ -71,7 +71,7 @@ pipeline {
             stage('Deploy cbr1backend') {
             steps {
                 dir('deploy') {
-                    sh 'kubectl delete deployment cbr1app-deploy-${ENV_BRNAME} -n ${ENV_BRNAME}'
+
                     sh 'kubectl apply -f deploy-back-${ENV_BRNAME}.yaml --namespace=${ENV_BRNAME}'
                     sh 'kubectl get svc --namespace=${ENV_BRNAME}'
                     sh 'kubectl get pods -n ${ENV_BRNAME} -o wide'
