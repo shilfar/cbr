@@ -1,0 +1,85 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: back
+
+---
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: cbr1app-deploy-back
+  labels:
+    app : cbr1app-deploy-back
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      project: cbr1app-back
+  template:
+    metadata:
+      labels:
+        project: cbr1app-back   # Service looks for this label
+    spec:
+      containers:
+        - name : cbr1app-back
+          image: umarta1/cbr-back:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 1234
+          env:
+          - name: DB_HOST
+            value: "prod_db_host"
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_USER
+            value: "postgres"
+          - name: DB_PASSWORD
+            value: "ubuntu20"
+          - name: DB_NAME
+            value: "mytestdb"
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 100m
+
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: cbr1app-back-autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v2beta1v1
+    kind: Deployment
+    name: cbr1app-deploy-back
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 50
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cbr1app-back-service
+  labels:
+     env  : back
+     owner: Ildar_Sharafeev
+spec:
+  type: ClusterIP
+#  type: LoadBalancer
+  selector:
+    project: cbr1app-back
+  ports:
+    - name      : app-listener
+      protocol  : TCP
+      port      : 1234  # Port on Service
+      targetPort: 1234  # Port on Pod
