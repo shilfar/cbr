@@ -10,13 +10,6 @@ resource "aws_security_group" "internet_via_5432_to_rds_postgresql_sg" {
     protocol    = "tcp"
     cidr_blocks = var.ssh_inbound_list_allowed
   }
-  ingress {
-    description = "Allow 5432_port inbound"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = var.ssh_inbound_list_allowed
-  }
 
   egress {
     from_port = 0
